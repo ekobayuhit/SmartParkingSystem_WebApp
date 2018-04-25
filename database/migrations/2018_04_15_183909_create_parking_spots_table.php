@@ -17,7 +17,6 @@ class CreateParkingspotsTable extends Migration
             $table->increments('id')->unique();
             $table->string('spot')->unique();
             $table->integer('occupied');
-            $table->integer('booked')->nullable();
             $table->timestamps();
         });
     }

@@ -14,16 +14,6 @@ class ApiParkingSpotController extends Controller
       return response()->json($response, 200);
     }
 
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
     //localhost:8000/api/sensor/3
     public function show($id)
     {
@@ -34,11 +24,6 @@ class ApiParkingSpotController extends Controller
     public function status_spot($spot){
       $response=ParkingSpot::where('spot','=',$spot)->get()->toArray();
       return response()->json($response, 200);
-    }
-
-    public function edit($id)
-    {
-        //
     }
 
     //localhost:8000/api/sensor/1?field=0
@@ -75,8 +60,9 @@ class ApiParkingSpotController extends Controller
       return response()->json($response, 200);
     }
 
-    public function destroy($id)
-    {
-        //
+    public function getfreespot() {
+        $response=count(ParkingSpot::doesntHave('Hasreservation')->get());
+        return response()->json($response, 200);
     }
+
 }

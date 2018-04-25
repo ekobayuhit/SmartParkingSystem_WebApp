@@ -1,18 +1,20 @@
 @extends('layouts.app')
 
-@section('content')
+@section('navbar')
+@include('partials.nav')
+@endsection
 
+@section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-1">
-
+        <div class="col-lg-8 col-md-9 col-sm-10">
+          <br><br><br>
           @if (session('status'))
               <div class="alert alert-success">
                   {{ session('status') }}
               </div>
           @endif
-
-          @if($reservations !=NULL)
+          @if($reservation !=NULL)
             <script>
                 function check_occupied_spot() {
                     var response = null;
@@ -37,35 +39,33 @@
                     }
                     xmlhttp.send();
                 };
-
                 setInterval(check_occupied_spot, 1000);
             </script>
+
             <div class="card">
-                <div class="card-header" style="background-color:purple;color:white">Reservation</div>
+                <div class="card-header" style="background-color:purple;color:white;text-shadow:2px 3px 5px black">Reservation</div>
                 <div class="card-body">
                   <table class ="table table-responsive">
                     <tbody>
-                      @foreach ($reservations as $reservation)
-                        <tr><td class="col-lg-3 col-sm-1"><b> id </b></td>
-                          <td class="col-bg-3 col-sm-1">{{ $reservation['id'] }}</td>
+                        <tr><td class="col-lg-3 col-md-4 col-sm-6"><b> id </b></td>
+                          <td class="col-bg-3 col-md-4 col-sm-6">{{ $reservation->id }}</td>
                         </tr>
-                        <tr><td class="col-lg-3 col-sm-1"><b> Parking spot </b></td>
-                          <td class="col-lg-3 col-sm-1" id="id_parkingspot">{{ $reservation['parkingspot'] }}</td>
+                        <tr><td class="col-lg-3 col-md-4 col-sm-6"><b> Parking spot </b></td>
+                          <td class="col-lg-3 col-md-4 col-sm-6" id="id_parkingspot">{{ $reservation->parkingspot }}</td>
                         </tr>
-                        <tr><td class="col-lg-3 col-sm-1"><b> Status </b>
+                        <tr><td class="col-lg-3 col-md-4 col-sm-6"><b> Status </b>
                           <small>[0=not validated, 1="validated"]</small></td>
-                          <td class="col-lg-3 col-sm-1">{{ $reservation['status'] }}</td>
+                          <td class="col-lg-3 col-md-4 col-sm-6">{{ $reservation->status }}</td>
                         </tr>
-                        @if($reservations[0]['status'] == "1")
-                          <tr><td class="col-lg-3 col-sm-1"><b> Time Start </b></td>
-                            <td class="col-lg-3 col-sm-1">{{ $reservation['time_start'] }}</td>
+                        @if($reservation->status == "1")
+                          <tr><td class="col-lg-3 col-md-4 col-sm-6"><b> Time Start </b></td>
+                            <td class="col-lg-3 col-md-4 col-sm-6">{{ $reservation->time_start }}</td>
                           </tr>
                         @endif
-                      @endforeach
                     </tbody>
                   </table>
-                  @if($reservations[0]['status'] == "1")
-                    <tr><td class="col-lg-3 col-sm-1">
+                  @if($reservation->status == "1")
+                    <tr><td class="col-lg-3 col-md-4 col-sm-6">
                       <div> Please enjoy your day, to check out please press button below
                       </div>
                       <br>
@@ -81,8 +81,8 @@
                     </td></tr>
                   @else
                   <div id="validate_button" style="display:none">
-                    <tr><td class="col-lg-3 col-sm-1">
-                      <div> Someone has arrived at {{$reservations[0]['parkingspot']}} ,
+                    <tr><td class="col-lg-3 col-md-4 col-sm-6">
+                      <div> Someone has arrived at {{$reservation->parkingspot}} ,
                         please press button below to validate that its you.
                       </div>
                       <br>
@@ -98,7 +98,7 @@
                     </td></tr>
                   </div>
                   <div id="cancel_button">
-                    <tr><td class="col-lg-3 col-sm-1">
+                    <tr><td class="col-lg-3 col-md-4 col-sm-6">
                       <p> Dont worry about not validated yet, our sensing device will sensing the presence of
                         your car when you've arrived on the spot and send you validation notification.
                       </p>
@@ -124,20 +124,15 @@
                 var response = null;
                 var freespots = 0;
                 var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("GET", "api/sensor", true);
+                xmlhttp.open("GET", "api/freespots", true);
                 xmlhttp.setRequestHeader("x-csrf-token", "soedirmanmoeda");
                 xmlhttp.setRequestHeader("Accept", "application/json");
                 xmlhttp.setRequestHeader("Content-Type", "application/json; charset=utf-8");
                 xmlhttp.onreadystatechange = function () {
                   if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
                     response = JSON.parse(xmlhttp.responseText);
-                    for(var i=0;i<response.length;i++){
-                      if(response[i]['occupied'] != 1 && response[i]['booked'] != 1){
-                        freespots++;
-                      }
-                    }
-                    document.getElementById('freespots').innerHTML=freespots;
-                    if(freespots!=0){
+                    document.getElementById('freespots').innerHTML=response;
+                    if(response!=0){
                       document.getElementById("spotavailable").style.display='';
                     }else{
                       document.getElementById("spotavailable").style.display = 'none';
@@ -148,25 +143,13 @@
               };
               setInterval(check_freespot, 1000);
             </script>
-            <div class="row">
-              <div class="card col-lg-4 col-sm-1" style="color:white;background-color:purple;">
+            <div class="row justify-content-center">
+              <div class="card col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color:white;background-color:purple;">
                 <div class="card-body text-center">
                   <h5> Free Parking Spots </h5>
-                  <div id="freespots" style="font-size:900%;text-shadow: 2px 4px 5px black">{{$count_parkingspot}}</div>
-                </div>
-              </div>
-              <div class="card col-lg-8 col-sm-1">
-                <div class="card-body">
-                  <h5> Steps : </h5>
-                  <ol>
-                      <li> Make a new reservation </li>
-                      <li> Validate your reservation when you've arrived at the spot </li>
-                      <li> Check Out and pay</li>
-                  </ol>
+                  <div id="freespots" style="font-size:900%;text-shadow: 4px 4px 7px black">{{$count_parkingspot}}</div>
                   <br>
                   <div id="spotavailable">
-                    <div> To reserve spot please press button below then our system will choose a spot for you.</div>
-                    <br>
                     <form action="{{ route('reservation_create') }}" method="GET">
                       <button type="submit" class="btn btn-xs btn-primary">
                         <div style="color:white;text-shadow:2px 3px 5px black" >

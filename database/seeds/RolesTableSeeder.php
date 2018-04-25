@@ -18,12 +18,12 @@ class RolesTableSeeder extends Seeder
         ]);
 
         $role = Role::create([
-          'name' => 'user',
+          'name' => 'member',
           'guard_name' => 'web',
         ]);
 
         $role = Role::create([
-          'name' => 'iot_device',
+          'name' => 'device',
           'guard_name' => 'api',
         ]);
     }

@@ -18,7 +18,6 @@ class ParkingSpotsTableSeeder extends Seeder
         ParkingSpot::create([
           'spot'  => $spot[$i],
           'occupied'  => '0',
-          'booked'    => '0',
         ]);
       }
     }

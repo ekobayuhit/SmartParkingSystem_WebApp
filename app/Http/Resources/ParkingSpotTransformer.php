@@ -18,7 +18,6 @@ class ParkingSpotTransformer extends JsonResource
           'id'          => $this->id,
           'spot'        => $this->spot,
           'occupied'    => $this->occupied,
-          'booked'      => $this->booked,
           'created at'  => $this->created_at,
           'updated at'  => $this->updated_at,
         ];

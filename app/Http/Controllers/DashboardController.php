@@ -10,21 +10,32 @@ use App\User;
 
 class DashboardController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function store(Request $request){
+
+      $this->validate($request, [
+          'spotname' => 'required|string|max:255',
+      ]);
+
+      ParkingSpot::create([
+        'spot'      => $request->spotname,
+        'occupied'  => '0',
+      ]);
+
+      return redirect()->back();
+    }
+
+    public function edit(Request $request){
+        ParkingSpot::all()->toArray();
+
+        return redirect()->back();
+    }
+
     public function show_parkingspots()
     {
       return view('dashboard');
@@ -35,8 +46,7 @@ class DashboardController extends Controller
       $reservations = Reservation::all()->toArray();
 
       for($i=0;$i<count($reservations);$i++) {
-          $user=User::find($reservations[$i]['userid'])->toArray();
-          $reservations[$i]['userid']=$user['name'];
+          $reservations[$i]['userid']=Reservation::find($reservations[$i]['id'])->belongsToUser->name;
       }
 
       return view('reservations', compact('reservations'));

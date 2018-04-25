@@ -13,13 +13,21 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
+
+Route::get('/about', function(){
+    return view('about');
+})->name('about');
 
 Auth::routes();
 
 Route::group(['middleware'=>'auth'], function () {
 
     Route::get('/dashboard', 'DashboardController@show_parkingspots')->name('dashboard_parkingspots');
+
+    Route::post('/dashboard/create', 'DashboardController@store')->name('add_spot');
+
+    Route::get('/dashboard/edit', 'DashboardController@edit')->name('edit_spots');
 
     Route::get('/dashboard/reservations', 'DashboardController@show_reservations')->name('dashboard_reservations');
 

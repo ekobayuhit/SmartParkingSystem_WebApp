@@ -26,3 +26,5 @@ Route::put('/sensor/{id}', 'ApiParkingSpotController@update');
 Route::put('/sensorall', 'ApiParkingSpotController@updateAll');
 
 Route::get('/sensor', 'ApiParkingSpotController@index');
+
+Route::get('/freespots', 'ApiParkingSpotController@getfreespot');

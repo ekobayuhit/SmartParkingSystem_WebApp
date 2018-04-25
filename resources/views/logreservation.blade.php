@@ -1,10 +1,14 @@
 @extends('layouts.app')
 
-@section('content')
+@section('navbar')
+@include('partials.nav')
+@endsection
 
+@section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-12 col-md-8 col-sm-1">
+          <br><br><br>
           @if (session('status'))
               <div class="alert alert-success">
                   {{ session('status') }}

@@ -1,21 +1,20 @@
 @extends('layouts.app')
 
 @section('navbar')
-@include('partials.nav')
+  @include('backend.partials.nav')
 @endsection
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-12">
-            <br><br><br>
+    <div class="row pt-5 justify-content-center">
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
             <div class="card">
                 <div class="card-header">
                   <h5><b>Reservations</b></h5>
                   <small> Refresh page to update data </small>
                 </div>
                 <div class="card-body">
-                  @if($reservations!=NULL)
+                  @if($count_reservations!=NULL)
                     <table class ="table table-responsive">
                       <tr>
                         <td class="col-lg-2 col-sm-1"><b> id </b></td>
@@ -55,6 +54,7 @@
                   @else
                     No reservation has been made.
                   @endif
+                  <div class="row justify-content-end"> {{ $reservations->links() }} </div>
                 </div>
             </div>
         </div>

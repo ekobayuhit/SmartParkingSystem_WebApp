@@ -9,48 +9,37 @@ class ParkingSpotController extends Controller
 {
     public function index()
     {
-        $parkingspots = ParkingSpot::all()->toArray();
-        return view('home', compact('parkingspots'));
-    }
-
-    public function create()
-    {
-        //
+        $parkingspots = ParkingSpot::paginate(10);
+        return view('parkingspot', compact('parkingspots'));
     }
 
     public function store(Request $request)
     {
-        //$response = "Data Created";
-        //return response()->json($response, 201);
+      $this->validate($request, [
+          'spotname' => 'required|string|max:255',
+      ]);
+      ParkingSpot::create([
+        'spot'      => $request->spotname,
+        'occupied'  => '0',
+      ]);
+      return redirect()->route('parkingspot_index');
     }
 
-
-    public function show($id)
+    public function edit(ParkingSpot $parkingspot)
     {
-
+        return view('parkingspot_edit', compact('parkingspot'));
     }
 
-    public function edit($id)
+    public function update(Request $request, ParkingSpot $parkingspot)
     {
-        //
+        $parkingspot->spot=$request->spotname;
+        $parkingspot->update();
+        return redirect()->route('parkingspot_index');
     }
 
-    //update via api
-    public function update(Request $request, $id)
-    {
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(ParkingSpot $parkingspot)
     {
         $parkingspot->delete();
-
-        redirect->back();
+        return redirect()->back();
     }
 }

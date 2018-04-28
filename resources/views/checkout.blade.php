@@ -1,22 +1,21 @@
 @extends('layouts.app')
 
 @section('navbar')
-@include('partials.nav')
+  @include('partials.nav')
 @endsection
 
 @section('content')
+<div id="checkout-page">
   <div class="container">
-    <br>
-    <div class="row justify-content-center">
+    <div class="row mt-3 justify-content-center">
       <div class="col-lg-8 col-md-8 col-sm-10">
-        <br><br>
-        <h3 style="color:#007bff;"><b>Check Out Success</b></h3>
-        <h5 style="color:#007bff;"> Thank You {{Auth::user()->name}} </h5>
-        <br><br>
-
-        <div class="card">
-            <div class="card-header" style="background-color:purple;color:white;text-shadow:2px 3px 5px black">Struct</div>
-            <div class="card-body">
+        <h3 class="text-white"><b>Check Out Success</b></h3>
+        <h5 class="text-white"> Thank You {{Auth::user()->name}} </h5>
+        <div class="card mt-3" style="background:rgba(52, 98, 158, 0.7);">
+            <div class="card-header" style="background-color:purple;color:white;text-shadow:2px 3px 5px black">
+              <span class="ion ion-ios-pricetag"> Invoice </span>
+            </div>
+            <div class="card-body text-white">
               <table class ="table table-striped">
                 <tbody>
                     <tr><td class="col-lg-4 col-md-4 col-sm-5"><b> id </b></td>
@@ -40,18 +39,22 @@
         </div>
       </div>
     </div>
-    <br><br>
-    <div class="row justify-content-center">
+    <div class="row mt-3 justify-content-center">
         <div class="col-lg-8 col-md-8 col-sm-10">
             <form action="{{ route('reservation_home') }}" method="GET">
               <button type="submit" class="btn btn-xs btn-primary">
-                <div style="color:white;text-shadow:2px 3px 5px black" >
+                <div style="color:white;text-shadow:2px 3px 5px black">
+                  <span class="ion ion-home"></span>
                   Back to Home
                 </div>
               </button>
             </form>
         </div>
     </div>
-    <br><br><br><br>
   </div>
+</div>
+@endsection
+
+@section('footer')
+  @include('partials.footer')
 @endsection
